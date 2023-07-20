@@ -46,6 +46,39 @@ class Graph {
         return this.root;
     }
 
+    getEdges(vertex) {
+        return this.root.get(vertex) ?? [];
+    }
+
+    bfs(vertex) {
+        if (!this.root.get(vertex)) return new Set();
+        //...
+        const visited = new Set(vertex);
+        const queue = [vertex];
+        while (queue.length > 0) {
+            const edge = queue.shift();
+            const edgeVertexs = this.root.get(edge);
+
+            for (const edgeVertex of edgeVertexs) {
+                if (!visited.has(edgeVertex)) {
+                    visited.add(edgeVertex);
+                    queue.push(edgeVertex);
+                }
+            }
+        }
+        return visited;
+    }
+
+    dfs(vertex, visited = new Set()) {
+        if (!this.root.get(vertex)) return visited;
+        //...
+        visited.add(vertex);
+        const edgeVertexes = this.root.get(vertex);
+        for (const edgeVertex of edgeVertexes) {
+            if (!visited.has(edgeVertex)) this.dfs(edgeVertex, visited);
+        }
+        return visited;
+    }
 }
 
 const graph = new Graph();
@@ -70,4 +103,7 @@ graph.addEdge("Z", "W");
 graph.removeVertex("X")
 graph.removeEdge("A", "C")
 
+console.log("Edges of P : ", graph.getEdges("P"))
+console.log("DFS :", graph.dfs("A"))
+console.log("BFS :", graph.bfs("T"))
 console.log(graph.root);
